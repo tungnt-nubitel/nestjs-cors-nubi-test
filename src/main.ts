@@ -25,6 +25,7 @@ async function bootstrap() {
   if (!corsOrigins.includes("https://localhost:8080")) {
     corsOrigins.push("https://localhost:8080");
   }
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.enableCors({
     origin: (origin, callback) => {
