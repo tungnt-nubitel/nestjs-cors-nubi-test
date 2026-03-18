@@ -24,6 +24,7 @@ async function bootstrap() {
   // ✅ Always allow local dev
   if (!corsOrigins.includes("https://localhost:8080")) {
     corsOrigins.push("https://localhost:8080");
+    corsOrigins.push("http://localhost:8080");
   }
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
