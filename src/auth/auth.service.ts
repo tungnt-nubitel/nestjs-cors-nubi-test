@@ -55,14 +55,14 @@ export class AuthService {
       domain?: string;
     },
   ) {
-    const isProd = process.env.NODE_ENV === "production";
+    const isProd = true;
     res.cookie(opts?.name ?? "nubi_click_to_chat_token", token, {
-      httpOnly: opts?.httpOnly ?? false,
+      httpOnly: true,
       secure: opts?.secure ?? isProd,
       sameSite: opts?.sameSite ?? (isProd ? "none" : "lax"),
       path: opts?.path ?? "/",
       maxAge: opts?.maxAgeMs ?? 7 * 24 * 60 * 60 * 1000,
-      domain: opts?.domain,
+      domain: opts?.domain ?? undefined,
     });
   }
 

@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { JwtOrBypassClickToChatGuard } from "./jwt-or-bypass-click-to-chat.guard";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
@@ -20,7 +21,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
   ],
 
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtOrBypassClickToChatGuard],
   exports: [AuthService],
 })
 export class AuthModule {}

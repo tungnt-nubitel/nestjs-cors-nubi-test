@@ -67,8 +67,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3400);
-  console.log("API running at http://localhost:3400");
+  await app.listen(3000);
+  console.log("API running at http://localhost:3000");
 }
 
 bootstrap();

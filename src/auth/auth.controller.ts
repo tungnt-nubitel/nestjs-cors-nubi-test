@@ -1,17 +1,22 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Logger,
+  Param,
   Post,
+  Req,
   Res,
+  UseGuards,
 } from "@nestjs/common";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { ClickToChatTokenDto } from "./dto/click-to-chat-token.dto";
 import { AuthService } from "./auth.service";
+import { JwtOrBypassClickToChatGuard } from "./jwt-or-bypass-click-to-chat.guard";
 
-@Controller("auth")
+@Controller("v1/socket-chat")
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
@@ -40,6 +45,8 @@ export class AuthController {
       this.authService.setAuthCookie(res, access_token, {
         name: "auth_token_click_to_chat",
         maxAgeMs: expiresIn * 1000,
+        httpOnly: true,
+        secure: true,
       });
 
       return { ok: true };
@@ -54,5 +61,30 @@ export class AuthController {
         message: "Failed to issue token",
       };
     }
+  }
+
+  @Get("conversation/:conversationId")
+  @UseGuards(JwtOrBypassClickToChatGuard)
+  async getIntegration(
+    @Param("conversationId") conversationId: string,
+    @Req() req: Request,
+  ) {
+    return {
+      id: "dummy-id",
+      tenant: "dummy-tenant",
+      interactionId: "dummy-interaction-id",
+      campaignId: "dummy-campaign-id",
+      conversationId,
+      ivrDisplayId: "dummy-ivr-display-id",
+      chatChannelId: "dummy-chat-channel-id",
+      sendTo: "dummy-send-to",
+      senderId: "dummy-sender-id",
+      senderFrom: "dummy-sender-from",
+      senderName: "dummy-sender-name",
+      senderSource: "dummy-sender-source",
+      createdAt: null,
+      conversation: null,
+      jwtValidated: (req as any).user?.campaignId !== "dev-bypass",
+    };
   }
 }
